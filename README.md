@@ -73,3 +73,7 @@ This project was created as a practical portfolio project focused on AI Automati
 Goiânia, Brazil
 
 Interested in AI Automation, RPA, n8n, APIs and business process automation.
+
+## 🔄 Workflow
+
+![AtendeAI Workflow](workflow.png)
