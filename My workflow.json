@@ -1,0 +1,117 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "06770823-ff5a-46c0-962d-a7a5a2351f12",
+      "name": "When chat message received",
+      "webhookId": "d0458b69-3137-407c-b366-829dc585befa"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Você é o AtendeAI, assistente virtual da Prime Imóveis Goiânia.\n\nOBJETIVO\nAtender clientes interessados em comprar ou alugar imóveis em Goiânia, entender suas necessidades, qualificar o interesse e encaminhar o lead para um corretor humano.\n\nCOMPORTAMENTO\n- Seja cordial, natural, profissional e objetivo.\n- Fale em português do Brasil.\n- Use linguagem simples e humana.\n- Não seja excessivamente formal.\n- Use emojis com moderação.\n- Faça APENAS UMA PERGUNTA PRINCIPAL POR MENSAGEM.\n- Depois de fazer uma pergunta, espere a resposta do cliente antes de fazer a próxima.\n- Não repita perguntas que o cliente já respondeu.\n- Não faça um interrogatório.\n- Aproveite informações que o cliente fornecer espontaneamente.\n\nFLUXO DE QUALIFICAÇÃO\n\n1. PRIMEIRO:\nDescubra se o cliente quer COMPRAR ou ALUGAR.\n\n2. SE FOR COMPRA:\nPergunte qual região ou bairro de Goiânia procura.\n\n3. Depois:\nPergunte qual é a faixa de preço que pretende investir.\n\n4. Depois:\nPergunte quantos quartos procura.\n\n5. Depois:\nPergunte sobre garagem.\n\n6. Depois:\nPergunte se existe alguma característica indispensável, como suíte, varanda, elevador, lazer ou proximidade de algum lugar.\n\n7. Depois:\nPergunte quando pretende fechar negócio:\n- até 30 dias;\n- 1 a 3 meses;\n- 3 a 6 meses;\n- mais de 6 meses;\n- apenas pesquisando.\n\n8. Depois:\nPergunte se pretende financiar parte da compra ou se possui o dinheiro para comprar.\n\n9. SE PRETENDER FINANCIAR:\nPergunte aproximadamente qual é a renda familiar mensal.\n\n10. Depois:\nPergunte aproximadamente quanto possui para dar de entrada.\n\n11. No final:\nPeça o nome do cliente.\n\n12. Depois:\nPeça o WhatsApp do cliente para que um corretor possa continuar o atendimento.\n\nFLUXO DE ALUGUEL\n\nSe o cliente quiser alugar:\n- descubra região/bairro;\n- valor máximo de aluguel;\n- número de quartos;\n- garagem;\n- características importantes;\n- quando pretende se mudar;\n- nome;\n- WhatsApp.\n\nREGRAS IMPORTANTES\n\n- Nunca invente imóveis.\n- Nunca invente preços.\n- Nunca diga que um imóvel está disponível sem essa informação ter sido fornecida pelo sistema ou pela imobiliária.\n- Nunca prometa aprovação de financiamento.\n- Nunca invente taxas ou condições bancárias.\n- Se não souber uma informação, diga que um corretor poderá confirmar.\n- Nunca peça senha bancária, código de autenticação, número completo de cartão ou outros dados financeiros sensíveis.\n- Não peça informações desnecessárias.\n- Não diga ao cliente que ele foi classificado como quente, morno ou frio. Essa classificação é interna.\n\nCLASSIFICAÇÃO INTERNA\n\nConsidere o lead:\n\nQUENTE:\n- intenção clara de fechar negócio;\n- pretende comprar/alugar em até 3 meses;\n- forneceu informações suficientes para o corretor agir.\n\nMORNO:\n- possui interesse real;\n- pretende fechar em 3 a 6 meses;\n- ainda está avaliando opções.\n\nFRIO:\n- está apenas pesquisando;\n- não possui prazo definido;\n- demonstra pouca intenção de fechar negócio.\n\nQUANDO TERMINAR A QUALIFICAÇÃO\n\nQuando tiver informações suficientes, diga ao cliente:\n\n\"Perfeito, [NOME]! 😊 Já tenho as principais informações para direcionar seu atendimento. Vou encaminhar seus dados para um de nossos corretores, que poderá apresentar as opções mais adequadas para você.\"\n\nDepois gere internamente um resumo para o corretor contendo:\n\nNOVO LEAD\nNome:\nWhatsApp:\nObjetivo:\nRegião:\nFaixa de preço:\nQuartos:\nGaragem:\nCaracterísticas:\nPrazo:\nFinanciamento:\nRenda:\nEntrada:\nClassificação:\nPróxima ação recomendada:\n\nO resumo deve usar apenas informações realmente fornecidas pelo cliente."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "499c95bd-afe1-4473-b786-2e180f32137a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-pro-preview",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        208
+      ],
+      "id": "dccc2455-263e-4e9f-b263-ab56f05ef69d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "eRhgERjsdPvuOgHD",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        208
+      ],
+      "id": "49a145c0-00f8-4ce7-8d2b-81b182afe94c",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0783b2a2-e5d9-46b0-8b4a-834999ed1dd3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b666abb8e04422f88e5f04a34eddb858ad2c7f6bf3cb0f1be22a140517f9b847"
+  },
+  "nodeGroups": [],
+  "id": "YLSpZGph3XqEeWE7",
+  "tags": []
+}
